@@ -1,1 +1,12 @@
-sadadas
+def buy_chicken(money, numbers):
+    a = [[]]
+    a.pop(0)
+    for i in range(money//5+1):
+        for j in range(money//3+1):
+            if (numbers-i-j) % 3 == 0 and 5*i+3*j+(numbers-i-j)/3 == money:
+                b = [i, j, numbers-i-j]
+                a.append(b)
+    return a
+
+
+print(buy_chicken(100, 100))
