@@ -1,7 +1,7 @@
 # 04.01.01 枚举算法（Enumeration Algorithm）
 ## 1、枚举算法简述
 
-> **枚举算法（Enumeration Algorithm）:枚举算法（Enumeration algorithm）也称为暴力搜索法和穷举法，该算法就是通过遍历所有问题可能的情况来找到满足问题要求的答案。
+> 枚举算法（Enumeration Algorithm）:枚举算法（Enumeration algorithm）也称为暴力搜索法和穷举法，该算法就是通过遍历所有问题可能的情况来找到满足问题要求的答案。
 
 枚举算法核心思想是通过系统遍历所有解空间来找到满足问题要求的解。
 
@@ -23,7 +23,7 @@
 
 著名的例子：「百钱买百鸡问题」这里小小拓展为「n钱买n鸡问题」
 
-> n钱买n鸡问题**：鸡翁一，值钱五；鸡母一，值钱三；鸡雏三，值钱一；n钱买n鸡，则鸡翁、鸡母、鸡雏各几何？
+> n钱买n鸡问题：鸡翁一，值钱五；鸡母一，值钱三；鸡雏三，值钱一；n钱买n鸡，则鸡翁、鸡母、鸡雏各几何？
 
    ```python
     def buy_chicken(money, numbers):
@@ -244,4 +244,166 @@ class Solution(object):
                 if (i*i+j*j)**0.5 in tdict:
                     cnt += 1
         return cnt
+```
+### 公因子数目
+
+#### 3.4.1 题目链接 [2427. 公因子的数目](https://leetcode.cn/problems/number-of-common-factors/)
+
+#### 3.4.2 题目大意
+
+**描述**：给定两个正整数 $a$ 和 $b$。
+
+**要求**：返回 $a$ 和 $b$ 的公因子数目。
+
+**说明**：
+
+- **公因子**：如果 $x$ 可以同时整除 $a$ 和 $b$，则认为 $x$ 是 $a$ 和 $b$ 的一个公因子。
+- $1 \le a, b \le 1000$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：a = 12, b = 6
+输出：4
+解释：12 和 6 的公因子是 1、2、3、6。
+```
+##### 解题思想
+先找出较大的数并定义一个参数和一个数组分别用来计算公因数的数量和存储较大数的因数，
+计算出较大数的所有因数存入数组中，
+再判断数组中的数是否也是较小数的因数
+##### 代码
+```python
+class Solution(object):
+    def commonFactors(self, a, b):
+        """
+        :type a: int
+        :type b: int
+        :rtype: int
+        """
+        c = [1]
+        d = 1
+        if a > b:
+            for i in range(2, a+1):
+                if a % i == 0:
+                    d += 1
+                    c.append(i)
+            for j in range(1, len(c)):
+                if b % c[j] != 0:
+                    d -= 1
+        else:
+            for i in range(2, b+1):
+                if b % i == 0:
+                    d += 1
+                    c.append(i)
+            for j in range(1, len(c)):
+                if a % c[j] != 0:
+                    d -= 1
+        return d
+```
+### 3.5 和为s的连续正数序列
+#### 3.5.1 题目链接 [剑指 Offer 57 - II. 和为s的连续正数序列](https://leetcode.cn/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/)
+
+#### 3.5.2 题目大意
+
+**描述**：给定一个正整数 `target`。
+
+**要求**：输出所有和为 `target` 的连续正整数序列（至少含有两个数）。序列中的数字由小到大排列，不同序列按照首个数字从小到大排列。
+
+**说明**：
+
+- $1 \le target \le 10^5$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：target = 9
+输出：[[2,3,4],[4,5]]
+```
+
+- 示例 2：
+
+```python
+输入：target = 15
+输出：[[1,2,3,4,5],[4,5,6],[7,8]]
+```
+#### 解题思想
+枚举序列的长度：从长度 n = 2 开始，逐渐增加序列的长度，直到序列的和超过 target.
+
+求解起始数字：对于每个 n，求解等式 target = n * (x + (n - 1) / 2) 以找到起始数字 x.
+#### 代码
+```python
+class Solution:
+    def fileCombination(self, target: int) -> List[List[int]]:
+        result = []
+        n = 2
+        while n * (n + 1) // 2 <= target:
+            x = target/n - (n - 1) / 2
+            if x == int(x):
+                result.insert(0, list(range(int(x), int(x) + n)))
+            n += 1
+
+        return result
+```
+
+### 3.6统计圆内格点数目
+#### 3.6.1 题目链接[2249. 统计圆内格点数目](https://leetcode.cn/problems/count-lattice-points-inside-a-circle/)
+
+#### 3.6.2 题目大意
+
+**描述**：给定一个二维整数数组 `circles`。其中 `circles[i] = [xi, yi, ri]` 表示网格上圆心为 `(xi, yi)` 且半径为 `ri` 的第 $i$ 个圆。
+
+**要求**：返回出现在至少一个圆内的格点数目。
+
+**说明**：
+
+- **格点**：指的是整数坐标对应的点。
+- 圆周上的点也被视为出现在圆内的点。
+- $1 \le circles.length \le 200$。
+- $circles[i].length == 3$。
+- $1 \le xi, yi \le 100$。
+- $1 \le ri \le min(xi, yi)$。
+
+**示例**：
+
+- 示例 1：
+
+![](https://assets.leetcode.com/uploads/2022/03/02/exa-11.png)
+
+```python
+输入：circles = [[2,2,1]]
+输出：5
+解释：
+给定的圆如上图所示。
+出现在圆内的格点为 (1, 2)、(2, 1)、(2, 2)、(2, 3) 和 (3, 2)，在图中用绿色标识。
+像 (1, 1) 和 (1, 3) 这样用红色标识的点，并未出现在圆内。
+因此，出现在至少一个圆内的格点数目是 5。
+```
+
+- 示例 2：
+
+```python
+输入：circles = [[2,2,2],[3,4,1]]
+输出：16
+解释：
+给定的圆如上图所示。
+共有 16 个格点出现在至少一个圆内。
+其中部分点的坐标是 (0, 2)、(2, 0)、(2, 4)、(3, 2) 和 (4, 4)。
+```
+#### 解题思想
+
+#### 代码
+```python
+class Solution:
+    def countLatticePoints(self, circles: List[List[int]]) -> int:
+        points = set()
+        for x, y, r in circles:
+            for i in range(x - r, x + r + 1):
+                for j in range(y - r, y + r + 1):
+                    if (i - x) ** 2 + (j - y) ** 2 <= r ** 2:
+                        points.add((i, j))
+        return len(points)
 ```
