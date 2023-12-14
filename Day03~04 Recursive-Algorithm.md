@@ -97,4 +97,127 @@ class Solution:
         return b
 ```
 
+### 5.2 爬楼梯
+#### 5.2.1 题目链接
+- [0070. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+#### 5.1 题目大意
+
+**描述**：假设你正在爬楼梯。需要 $n$ 阶你才能到达楼顶。每次你可以爬 $1$ 或 $2$ 个台阶。现在给定一个整数 $n$。
+
+**要求**：计算出有多少种不同的方法可以爬到楼顶。
+
+**说明**：
+
+- $1 \le n \le 45$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：n = 2
+输出：2
+解释：有两种方法可以爬到楼顶。
+1. 1 阶 + 1 阶
+2. 2 阶
+```
+
+- 示例 2：
+
+```python
+输入：n = 3
+输出：3
+解释：有三种方法可以爬到楼顶。
+1. 1 阶 + 1 阶 + 1 阶
+2. 1 阶 + 2 阶
+3. 2 阶 + 1 阶
+```
+#### 枚举思路1(内存占用较多但是耗时很短)：
+遍历走两步的所有可能步数，然后再进行排列组合
+#### 代码1：
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        num = 1
+        for i in range(1, int(n/2)+1):
+            a = 1
+            b = 1
+            for j in range(n-i, n-2*i, -1):
+                a = a * j
+            for k in range(1, i+1):
+                b = b * k
+            num += a/b
+        return int(num)
+```
+#### 递归思路2（会超时，思想简单）：
+如果 n = 1，只有一种方法（爬1个台阶）。
+如果 n = 2，有两种方法（爬两次1个台阶或一次爬2个台阶）。
+#### 代码2：
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        elif n == 2:
+            return 2
+        else:
+            return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+```
+### 5.3 翻转二叉树
+#### 5.3.1 题目链接
+
+- [0226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
+
+#### 5.3.2 题目大意
+
+**描述**：给定一个二叉树的根节点 $root$。
+
+**要求**：将该二叉树进行左右翻转。
+
+**说明**：
+
+- 树中节点数目范围在 $[0, 100]$ 内。
+- $-100 \le Node.val \le 100$。
+
+**示例**：
+
+- 示例 1：
+
+![](https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg)
+
+```python
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+- 示例 2：
+
+![](https://assets.leetcode.com/uploads/2021/03/14/invert2-tree.jpg)
+
+```python
+输入：root = [2,1,3]
+输出：[2,3,1]
+```
+#### 递归思路：
+交换左右子树，分别递归调用
+#### 代码：
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root is None:
+            return None
+
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+
+        return root
+```
 
