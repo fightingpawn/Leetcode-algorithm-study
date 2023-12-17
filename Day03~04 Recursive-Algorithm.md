@@ -220,4 +220,74 @@ class Solution:
 
         return root
 ```
+### 5.4 反转链表
 
+#### 5.4.1 题目链接 [0206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+#### 5.4.2 题目大意
+
+**描述**：给定一个单链表的头节点 $head$。
+
+**要求**：将该单链表进行反转。可以迭代或递归地反转链表。
+
+**说明**：
+
+- 链表中节点的数目范围是 $[0, 5000]$。
+- $-5000 \le Node.val \le 5000$。
+
+**示例**：
+
+```python
+输入：head = [1,2,3,4,5]
+输出：[5,4,3,2,1]
+
+解释
+翻转前    1->2->3->4->5->NULL
+反转后    5->4->3->2->1->NULL
+```
+#### 5.4.3解题思想
+遍历到下一个节点为空或者当前节点为空的节点，然后依次反转
+
+#### 5.4.4解题代码
+```python
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head == None or head.next == None:
+            return head
+        Listp = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return Listp
+```
+### 5.5 反转链表 II
+
+#### 5.5.1 题目链接 [0092. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
+
+#### 5.5.2 题目大意
+
+**描述**：给定单链表的头指针 $head$ 和两个整数 $left$ 和 $right$ ，其中 $left \le right$。
+
+**要求**：反转从位置 $left$ 到位置 $right$ 的链表节点，返回反转后的链表 。
+
+**说明**：
+
+- 链表中节点数目为 $n$。
+- $1 \le n \le 500$。
+- $-500 \le Node.val \le 500$。
+- $1 \le left \le right \le n$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]
+```
+
+- 示例 2：
+
+```python
+输入：head = [5], left = 1, right = 1
+输出：[5]
+```
