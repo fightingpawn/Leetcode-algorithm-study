@@ -79,3 +79,110 @@ class Solution:
     def sortArray(self, nums: List[int]) -> List[int]:
         return self.mergeSort(nums)
 ```
+### 4.2 二分查找
+
+#### 4.2.1 题目链接
+
+- [704. 二分查找 - 力扣（LeetCode）](https://leetcode.cn/problems/binary-search/)
+
+#### 4.2.2 题目大意
+
+**描述**：给定一个含有 $n$ 个元素有序的（升序）整型数组 $nums$ 和一个目标值 $target$。
+
+**要求**：返回 $target$ 在数组 $nums$ 中的位置，如果找不到，则返回 $-1$。
+
+**说明**：
+
+- 假设 $nums$ 中的所有元素是不重复的。
+- $n$ 将在 $[1, 10000]$ 之间。
+- $-9999 \le nums[i] \le 9999$。
+
+**示例**：
+
+```python
+输入    nums = [-1,0,3,5,9,12], target = 9
+输出    4
+解释    9 出现在 nums 中并且下标为 4
+```
+
+#### 4.2.3 解题思路
+
+我们使用分治算法来解决这道题。与其他分治题目不一样的地方是二分查找不用进行合并过程，最小子问题的解就是原问题的解。
+
+1. **分解**：将数组的 $n$ 个元素分解为左右两个各包含 $\frac{n}{2}$ 个元素的子序列。
+2. **求解**：取中间元素 $nums[mid]$ 与 $target$ 相比。
+   1. 如果相等，则找到该元素；
+   2. 如果 $nums[mid] < target$，则递归在左子序列中进行二分查找。
+   3. 如果 $nums[mid] > target$，则递归在右子序列中进行二分查找。
+
+二分查找的的分治算法过程如下图所示。
+
+![](../../images/20211223115032.png)
+
+#### 4.2.4 代码
+
+二分查找问题的非递归实现的分治算法代码如下：
+
+```python
+def binary_search(nums, target):
+    left = 0
+    right = len(nums)-1
+    while left <= right:
+        mid = left + (right-left)//2
+        if nums[mid] > target:
+            right = mid - 1
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            return mid
+    return -1
+```
+
+### 4.3 求指数
+
+#### 4.3.1题目链接 [0050. Pow(x, n)](https://leetcode.cn/problems/powx-n/)
+
+#### 4.3.2 题目大意
+
+**描述**：给定浮点数 $x$ 和整数 $n$。
+
+**要求**：计算 $x$ 的 $n$ 次方（即 $x^n$）。
+
+**说明**：
+
+- $-100.0 < x < 100.0$。
+- $-2^{31} \le n \le 2^{31} - 1$。
+- $n$ 是一个整数。
+- $-10^4 \le x^n \le 10^4$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：x = 2.00000, n = 10
+输出：1024.00000
+```
+
+- 示例 2：
+
+```python
+输入：x = 2.00000, n = -2
+输出：0.25000
+解释：2-2 = 1/22 = 1/4 = 0.25
+```
+
+#### 解题思想：
+
+#### 解题代码：
+```python
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if n < 0:
+            x = 1/x
+            n = -n
+        if n == 0:
+            return 1
+        res = self.myPow(x, n//2)
+        return res*res if n % 2 == 0 else res*res*x
+```
