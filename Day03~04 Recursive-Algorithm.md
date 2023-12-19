@@ -2,7 +2,7 @@
 
 
 ## 1. 递归简介
-> **递归（Recursive）**：是一种通过重复将原问题分解为同类的子问题而解决的方法。感觉思想有点类似与数学中的分步积分。
+> **递归（Recursive）**：是一种通过重复将原问题分解为同类的子问题而解决的方法，通常可以通过在函数中再次调用自身来实现。感觉思想有点类似与数学中的分步积分。
 
 ## 5. 递归的应用（Application of recursion）
 ### 5.1 斐波那契数
@@ -290,4 +290,94 @@ class Solution:
 ```python
 输入：head = [5], left = 1, right = 1
 输出：[5]
+```
+
+#### 解题思路
+使用哑变量dummy，确保当反转列表需要反转头结点时也可以正确反转
+创建四个节点：
+pre：用来指向需要反转的第一个节点前一个节点
+cur：用来指向目前待反转节点
+tail：尾节点，也就是需要反转的第一个节点
+nxt：当前正在反转的节点的下一个节点
+#### 解题代码
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        count = 1
+        dummy = ListNode(0)
+        dummy.next = head
+        pre = dummy
+        while pre.next and count < left:
+            pre = pre.next
+            count += 1
+        cur = pre.next
+        tail = cur
+        while cur and count <= right:
+            nxt = cur.next
+            cur.next = pre.next
+            pre.next = cur
+            tail.next = nxt
+            cur = nxt
+            count += 1
+        return dummy.next
+```
+### 5.6 第K个语法符号
+#### 5.6.1题目链接 [0779. 第K个语法符号](https://leetcode.cn/problems/k-th-symbol-in-grammar/)
+
+#### 5.6.2 题目大意
+
+**描述**：给定两个整数 $n$ 和 $k$。我们可以按照下面的规则来生成字符串：
+
+- 第一行写上一个 $0$。
+- 从第二行开始，每一行将上一行的 $0$ 替换成 $01$，$1$ 替换为 $10$。
+
+**要求**：输出第 $n$ 行字符串中的第 $k$ 个字符。
+
+**说明**：
+
+- $1 \le n \le 30$。
+- $1 \le k \le 2^{n - 1}$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入: n = 2, k = 1
+输出: 0
+解释: 
+第一行: 0 
+第二行: 01
+```
+
+- 示例 2：
+
+```python
+输入: n = 4, k = 4
+输出: 0
+解释: 
+第一行：0
+第二行：01
+第三行：0110
+第四行：01101001
+```
+#### 解题思想
+通过观察可以发现，每一行的前半部分都与上一行相一致，后半部分与上一行0,1相反。
+那么当k<2^(n-2)时，我们可以直接返回至上一行再去定位。
+如果大于时，我们可以知道第 k 个字符就是上一行的第 k - 2^（n-2）个字符的反转
+#### 解题代码
+```python
+class Solution:
+    def kthGrammar(self, n: int, k: int) -> int:
+        if n == 1:
+            return 0
+        if k <= 1 << (n-2):
+            return self.kthGrammar(n-1, k)
+        else:
+            return self.kthGrammar(n-1, k-(1 << (n-2))) ^ 1
 ```
