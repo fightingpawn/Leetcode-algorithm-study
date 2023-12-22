@@ -186,3 +186,82 @@ class Solution:
         res = self.myPow(x, n//2)
         return res*res if n % 2 == 0 else res*res*x
 ```
+### 4.4 多数元素
+#### 4.4.1题目链接 [0169. 多数元素](https://leetcode.cn/problems/majority-element/)
+
+#### 4.4.2 题目大意
+
+**描述**：给定一个大小为 $n$ 的数组 `nums`。
+
+**要求**：返回其中相同元素个数最多的元素。
+
+**说明**：
+
+- $n == nums.length$。
+- $1 \le n \le 5 * 10^4$。
+- $-10^9 \le nums[i] \le 10^9$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：nums = [3,2,3]
+输出：3
+```
+
+- 示例 2：
+
+```python
+输入：nums = [2,2,1,1,1,2,2]
+输出：2
+```
+#### 解题思想
+初始化： 票数统计 votes = 0 ， 众数 x。
+循环： 遍历数组 nums 中的每个数字 num 。
+当 票数 votes 等于 0 ，则假设当前数字 num 是众数。
+当 num = x 时，票数 votes 自增 1 ；当 num != x 时，票数 votes 自减 1 。
+返回值： 返回 x 即可。
+#### 解题代码
+```python
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        votes = 0
+        for num in nums:
+            if votes == 0:
+                x = num
+            votes += 1 if num == x else -1
+        return x
+```
+### 4.5 最大子数组和
+#### 4.5.1题目链接 [0053. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+#### 4.5.2 题目大意
+
+**描述**：给定一个整数数组 `nums`。
+
+**要求**：找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**说明**：
+
+- **子数组**：指的是数组中的一个连续部分。
+- $1 \le nums.length \le 10^5$。
+- $-10^4 \le nums[i] \le 10^4$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6。
+```
+
+- 示例 2：
+
+```python
+输入：nums = [1]
+输出：1
+```
+#### 解题思想：
