@@ -264,4 +264,82 @@ class Solution:
 输入：nums = [1]
 输出：1
 ```
-#### 解题思想：
+#### 解题思想（暴力枚举）：
+tmp记录当前和，max_记录最大和，遍历一遍，当tmp为负时，从当前索引数组元素重新开始
+时空复杂度都为O（n）
+#### 解题代码：
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        tmp = nums[0]
+        max_ = tmp
+        for i in range(1, len(nums)):
+            if tmp > 0:
+                max_ = max(max_, nums[i]+tmp, tmp)
+                tmp += nums[i]
+            else:
+                max_ = max(max_, nums[i])
+                tmp = nums[i]
+        return max_
+```
+#### 解题思路（分治法）;
+把数组分为两部分，最大子数组可能出现的情况有三种，可能出现在右边，可能出现在左边，也有可能出现在中间，左右两部分的数组都包含一部分。
+#### 解题代码：
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+        else:
+            max_right = self.maxSubArray(nums[len(nums)//2:])
+            max_left = self.maxSubArray(nums[:len(nums)//2])
+        max_r = nums[len(nums)//2]
+        tmp = 0
+        for i in range(len(nums)//2, len(nums)):
+            tmp += nums[i]
+            max_r = max(tmp, max_r)
+        max_l = nums[len(nums)//2-1]
+        tmp = 0
+        for i in range(len(nums)//2 - 1, -1, -1):
+            tmp += nums[i]
+            max_l = max(max_l, tmp)
+        return max(max_left, max_right, max_l+max_r)
+```
+
+### 4.6 漂亮数组
+#### 4.6.1题目链接 [0932. 漂亮数组](https://leetcode.cn/problems/beautiful-array/)
+#### 4.6.2 题目大意
+
+**描述**：给定一个整数 $n$。
+
+**要求**：返回长度为 $n$ 的任一漂亮数组。
+
+**说明**：
+
+- **漂亮数组**（长度为 $n$ 的数组 $nums$ 满足下述条件）：
+  - $nums$ 是由范围 $[1, n]$ 的整数组成的一个排列。
+  - 对于每个 $0 \le i < j < n$，均不存在下标 $k$（$i < k < j$）使得 $2 \times nums[k] == nums[i] + nums[j]$。
+- $1 \le n \le 1000$。
+- 本题保证对于给定的 $n$ 至少存在一个有效答案。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：n = 4
+输出：[2,1,4,3]
+```
+
+- 示例 2：
+
+```python
+输入：n = 5
+输出：[3,1,2,5,4]
+```
+#### 解题思路：
+
+#### 解题代码：
+```python
+
+```
