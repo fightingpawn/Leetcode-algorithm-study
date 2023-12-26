@@ -338,8 +338,124 @@ class Solution:
 输出：[3,1,2,5,4]
 ```
 #### 解题思路：
-
+因为要满足题目所给不等式，左边的2*k一定是一个偶数，所以只需要让左边i+j为一个奇数，那么不等式必然满足。
+采用分治思想分成左右两部分，左边为奇数右边为偶数，奇数个数一定为（n+1）//2，偶数个数一定为n//2，递归至整数一开始分别把左右两边的数奇数化和偶数化
 #### 解题代码：
 ```python
+class Solution:
+    def beautifulArray(self, n: int) -> List[int]:
+        if n == 1:  
+            return [1]
+        else:
+            a = self.beautifulArray((n+1)//2)
+            b = self.beautifulArray(n//2)
+        return [2*x-1 for x in a] + [2*x for x in b]
+```
+### 4.7 为运算表达式设计优先级
 
+#### 4.7.1题目链接 [0241. 为运算表达式设计优先级](https://leetcode.cn/problems/different-ways-to-add-parentheses/)
+
+#### 4.7.2 题目大意
+
+**描述**：给定一个由数字和运算符组成的字符串 `expression`。
+
+**要求**：按不同优先级组合数字和运算符，计算并返回所有可能组合的结果。你可以按任意顺序返回答案。
+
+**说明**：
+
+- 生成的测试用例满足其对应输出值符合 $32$ 位整数范围，不同结果的数量不超过 $10^4$。
+- $1 \le expression.length \le 20$。
+- `expression` 由数字和算符 `'+'`、`'-'` 和 `'*'` 组成。
+- 输入表达式中的所有整数值在范围 $[0, 99]$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：expression = "2-1-1"
+输出：[0,2]
+解释：
+((2-1)-1) = 0 
+(2-(1-1)) = 2
+```
+
+- 示例 2：
+
+```python
+输入：expression = "2*3-4*5"
+输出：[-34,-14,-10,-10,10]
+解释：
+(2*(3-(4*5))) = -34 
+((2*3)-(4*5)) = -14 
+((2*(3-4))*5) = -10 
+(2*((3-4)*5)) = -10 
+(((2*3)-4)*5) = 10
+```
+#### 解题思想：
+分解：按运算符分成左右两部分，分别求解
+解决：实现一个递归函数，输入算式，返回算式解
+合并：根据运算符合并左右两部分的解，得出最终解
+#### 解题代码：
+```python
+class Solution:
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        if expression.isdigit():
+            return [int(expression)]
+        res = []
+        for i, char in enumerate(expression):
+            if char in '+-*':
+                left = self.diffWaysToCompute(expression[:i])
+                right = self.diffWaysToCompute(expression[i+1:])
+                for l in left:
+                    for r in right:
+                        if char == '+':
+                            res.append(l+r)
+                        elif char == '-':
+                            res.append(l-r)
+                        else:
+                            res.append(l*r)
+        return res
+```
+
+### 4.8
+#### 4.8.1题目链接 [0023. 合并K个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/)
+
+####  4.8.2题目大意
+
+**描述**：给定一个链表数组，每个链表都已经按照升序排列。
+
+**要求**：将所有链表合并到一个升序链表中，返回合并后的链表。
+
+**说明**：
+
+- $k == lists.length$。
+- $0 \le k \le 10^4$。
+- $0 \le lists[i].length \le 500$。
+- $-10^4 \le lists[i][j] \le 10^4$。
+- $lists[i]$ 按升序排列。
+- $lists[i].length$ 的总和不超过 $10^4$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：lists = [[1,4,5],[1,3,4],[2,6]]
+输出：[1,1,2,3,4,4,5,6]
+解释：链表数组如下：
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+将它们合并到一个有序链表中得到。
+1->1->2->3->4->4->5->6
+```
+
+- 示例 2：
+
+```python
+输入：lists = []
+输出：[]
 ```
