@@ -78,4 +78,91 @@ backtracking(nums)
 输入：nums = [0]
 输出：[[],[0]]
 ```
+#### 解题思想：
 
+#### 解题代码：
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        path = []
+        def traceback(nums, index):
+            res.append(path[:])
+            if index >= len(nums):
+                return 
+            for i in range(index, len(nums)):
+                path.append(nums[i])
+                traceback(nums, i+1)
+                path.pop()
+        traceback(nums, 0)
+        return res
+```
+### 5.2 N 皇后
+
+#### 5.2.1 题目链接
+
+- [51. N 皇后 - 力扣（LeetCode）](https://leetcode.cn/problems/n-queens/)
+
+#### 5.2.2 题目大意
+
+**描述**：给定一个整数 $n$。
+
+**要求**：返回所有不同的「$n$ 皇后问题」的解决方案。每一种解法包含一个不同的「$n$ 皇后问题」的棋子放置方案，该方案中的 `Q` 和 `.` 分别代表了皇后和空位。
+
+**说明**：
+
+- **n 皇后问题**：将 $n$ 个皇后放置在 $n \times n$ 的棋盘上，并且使得皇后彼此之间不能攻击。
+- **皇后彼此不能相互攻击**：指的是任何两个皇后都不能处于同一条横线、纵线或者斜线上。
+- $1 \le n \le 9$。
+
+**示例**：
+
+- 示例 1：
+
+```python
+输入：n = 4
+输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+解释：如下图所示，4 皇后问题存在 2 个不同的解法。
+```
+
+![](https://assets.leetcode.com/uploads/2020/11/13/queens.jpg)
+#### 解题代码
+```python
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        if not n: return 
+        res = []
+        board = [['.']*n for _ in range(n)]
+        def isvalid(board, row, col):
+            for i in range(n):
+                if board[i][col] == 'Q':
+                    return False
+            i, j = row - 1, col - 1
+            while i >= 0 and j >= 0:
+                if board[i][j] == 'Q':
+                    return False
+                i -= 1
+                j -= 1
+            i, j = row - 1, col + 1
+            while i >= 0 and j < n:
+                if board[i][j] == 'Q':
+                    return False
+                i -= 1
+                j += 1
+            return True
+        def traceback(board, row):
+            if row == n:
+                temp_res = []
+                for temp in board:
+                    temp_path = "".join(temp)
+                    temp_res.append(temp_path)
+                res.append(temp_res)
+            for col in range(n):
+                if not isvalid(board, row, col):
+                    continue
+                board[row][col] = 'Q'
+                traceback(board, row+1)
+                board[row][col] = '.'
+        traceback(board, 0)
+        return res
+```
